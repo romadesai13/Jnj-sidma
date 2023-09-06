@@ -37,17 +37,15 @@ function constructInitialNodes() {
       const groupId = generateGroupId(n);
       const nodeId = generateNodeId1(n);
       const prevNodeId = generatePrevNodeId(n);
-      console.log(nodes, groupId, !nodes.some(x => x.id === groupId))
-      if(!nodes.includes(x=> x.id == groupId)) {
-        console.log('Hi', initX, initY)
+      if(nodes.findIndex(x=> x.id == groupId) == -1) {
         const newGroup = {
           id: groupId,
-          type: 'group',
           data: { label: n.Scenario },
-          position: { x: initX, y: initY },
+          className: 'light',
           style: {
-            width: '33%',
-            height: '100%',
+            backgroundColor: 'rgba(255, 0, 0, 0.2)',
+            width: 700,
+            height: 900,
           },
         };
         nodes.push(newGroup);
@@ -58,7 +56,8 @@ function constructInitialNodes() {
       const newNode = {
         id: nodeId,
         data: { label: n.Role },
-        parentNode: n.Scenario 
+        parentNode: n.Scenario,
+        extent: 'parent' 
       };
 
       if (prevNodeId == "--") {
@@ -81,7 +80,6 @@ function constructInitialNodes() {
       }
     });
   }
-  console.log("initialnodes: ", nodes, "initial edged", edges);
   return {
     initialNodes: nodes,
     initialEdges: edges,
@@ -125,6 +123,50 @@ const getLayoutedElements = (nodes, edges, direction = "LR") => {
     return node;
   });
 
+  nodes.forEach((node) => {
+    if(!node.parentNode) {
+      let startX = Number.MAX_VALUE;
+      let startY = Number.MAX_VALUE;
+      let endX = 0;
+      let endY = 0;
+      let children = nodes.filter(x=> x.parentNode == node.id)
+      children.forEach(element => {
+        const nodeWithPosition = dagreGraph.node(element.id)
+        console.log('nodeWithPosition', nodeWithPosition);
+        if(startX > nodeWithPosition.x) {
+          startX = nodeWithPosition.x;
+        }
+
+        if(startY > nodeWithPosition.y) {
+          startY = nodeWithPosition.y;
+        }
+
+        if(endX < nodeWithPosition.x) {
+          endX = nodeWithPosition.x;
+        }
+
+        if(endY < nodeWithPosition.y) {
+          endY = nodeWithPosition.y;
+        }
+      });
+
+      console.log(startX, endX, startY, endY);
+      
+      node.position = {
+        x: startX,
+        y: startY,
+      };
+
+      // node.style = {
+      //   width: endX + 172 - startX,
+      //   height: endY + 36 - startY
+      // },
+      console.log(node);
+    }
+
+    return node;
+  });
+
   return { nodes, edges };
 };
 
@@ -141,7 +183,7 @@ const AppFlow = () => {
     (params) =>
       setEdges((eds) =>
         addEdge(
-          { ...params, type: ConnectionLineType.SmoothStep, animated: true },
+          { ...params},
           eds
         )
       ),
