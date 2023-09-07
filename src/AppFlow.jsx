@@ -18,20 +18,28 @@ function generateGroupId(dataNode) {
 }
 
 function generateNodeId1(dataNode) {
-  return `${dataNode.BusinessProcess}-${dataNode.Scenario}-${dataNode.Role}`;
+  return `${dataNode.BusinessProcess}+${dataNode.Scenario}+${dataNode.Role}`;
 }
 
 function generatePrevNodeId(dataNode) {
-  return `${dataNode.BusinessProcess_Prev}-${dataNode.Scenario_Prev}-${dataNode.Role_Prev}`;
+  return `${dataNode.BusinessProcess_Prev}+${dataNode.Scenario_Prev}+${dataNode.Role_Prev}`;
+}
+
+function getChildNodes(dataNodes, groupId) {
+  let children = [];
+  dataNodes.forEach(node => {
+    const idParts = node.id.split("+");
+    if(idParts && idParts.length > 2 && idParts[1] == groupId) {
+      children.push(node);
+    }
+  });
+
+  return children;
 }
 
 function constructInitialNodes() {
   const nodes = [];
   const edges = [];
-  let initX = 0;
-  let initY = 0;
-  let xOffset = 400;
-  let yOffset = 400;
   if (jsonData) {
     jsonData.map((n) => {
       const groupId = generateGroupId(n);
@@ -42,22 +50,21 @@ function constructInitialNodes() {
           id: groupId,
           data: { label: n.Scenario },
           className: 'light',
+          type: "output",
           style: {
-            backgroundColor: 'rgba(255, 0, 0, 0.2)',
             width: 700,
             height: 900,
           },
         };
         nodes.push(newGroup);
-        initX+=xOffset;
-        initY+=yOffset;
       }
 
       const newNode = {
         id: nodeId,
         data: { label: n.Role },
-        parentNode: n.Scenario,
-        extent: 'parent' 
+        //parentNode: n.Scenario,
+        // expandParent : true,
+        //extent: 'parent' 
       };
 
       if (prevNodeId == "--") {
@@ -124,15 +131,14 @@ const getLayoutedElements = (nodes, edges, direction = "LR") => {
   });
 
   nodes.forEach((node) => {
-    if(!node.parentNode) {
+    if(node.type === 'output') {
       let startX = Number.MAX_VALUE;
       let startY = Number.MAX_VALUE;
       let endX = 0;
       let endY = 0;
-      let children = nodes.filter(x=> x.parentNode == node.id)
+      let children = getChildNodes(nodes, node.id);
       children.forEach(element => {
         const nodeWithPosition = dagreGraph.node(element.id)
-        console.log('nodeWithPosition', nodeWithPosition);
         if(startX > nodeWithPosition.x) {
           startX = nodeWithPosition.x;
         }
@@ -150,18 +156,16 @@ const getLayoutedElements = (nodes, edges, direction = "LR") => {
         }
       });
 
-      console.log(startX, endX, startY, endY);
-      
       node.position = {
-        x: startX,
-        y: startY,
+        x: startX - 50,//50 buffer,
+        y: 0, //startY,
       };
 
-      // node.style = {
-      //   width: endX + 172 - startX,
-      //   height: endY + 36 - startY
-      // },
-      console.log(node);
+      node.style = {
+        width: endX + 172 - startX + 50,//50 buffer
+        height: endY + 36 - startY > 500 ? endY + 36 - startY  : 500, //500 for min height
+        backgroundColor: 'rgba(255, 255, 255, 0)',
+      }
     }
 
     return node;
