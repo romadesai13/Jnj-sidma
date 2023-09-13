@@ -13,7 +13,8 @@ export const jsonData = [
       "FinishedBy": "FColasa",
       "DurationMinutes": 4662,
       "Duration": "8 Days,  5 Hrs, 42 Mins",
-      "System": "EU2"
+      "System": "EU2",
+      "State": "Completed"
     },
     {
       "RequestID": 1007599,
@@ -29,7 +30,8 @@ export const jsonData = [
       "FinishedBy": "DPIEDFOR",
       "DurationMinutes": 440,
       "Duration": "0 Days,  7 Hrs, 20 Mins",
-      "System": "EU2"
+      "System": "EU2",
+      "State": "Completed"
     },
     {
       "RequestID": 1007599,
@@ -45,7 +47,8 @@ export const jsonData = [
       "FinishedBy": "process",
       "DurationMinutes": 1,
       "Duration": "0 Days,  0 Hrs,  1 Min",
-      "System": "EU2"
+      "System": "EU2",
+      "State": "Completed"
     },
     {
       "RequestID": 1008230,
@@ -61,7 +64,8 @@ export const jsonData = [
       "FinishedBy": "DPIEDFOR",
       "DurationMinutes": 1,
       "Duration": "0 Days,  0 Hrs,  1 Min",
-      "System": "EU2"
+      "System": "EU2",
+      "State": "Completed"
     },
     {
       "RequestID": 1008230,
@@ -77,7 +81,8 @@ export const jsonData = [
       "FinishedBy": "pkilaru",
       "DurationMinutes": 162,
       "Duration": "0 Days,  2 Hrs, 42 Mins",
-      "System": "EU2"
+      "System": "EU2",
+      "State": "Completed"
     },
     {
       "RequestID": 1008230,
@@ -93,7 +98,8 @@ export const jsonData = [
       "FinishedBy": "AB3",
       "DurationMinutes": 418,
       "Duration": "0 Days,  6 Hrs, 58 Mins",
-      "System": "EU2"
+      "System": "EU2",
+      "State": "Completed"
     },
     {
       "RequestID": 1008230,
@@ -109,7 +115,8 @@ export const jsonData = [
       "FinishedBy": "process",
       "DurationMinutes": 19028,
       "Duration": "35 Days,  2 Hrs,  8 Mins",
-      "System": "EU2"
+      "System": "EU2",
+      "State": "Completed"
     },
     {
       "RequestID": 1008230,
@@ -125,7 +132,8 @@ export const jsonData = [
       "FinishedBy": "JSCHELL",
       "DurationMinutes": 2540,
       "Duration": "4 Days,  6 Hrs, 20 Mins",
-      "System": "EU2"
+      "System": "EU2",
+      "State": "InProgress"
     },
     {
       "RequestID": 1008230,
@@ -141,7 +149,8 @@ export const jsonData = [
       "FinishedBy": "JSCHELL",
       "DurationMinutes": 2540,
       "Duration": "4 Days,  6 Hrs, 20 Mins",
-      "System": "EU2"
+      "System": "EU2",
+      "State": "InProgress"
     },
     {
       "RequestID": 1008230,
@@ -157,7 +166,8 @@ export const jsonData = [
       "FinishedBy": "GRaja2",
       "DurationMinutes": 18866,
       "Duration": "34 Days,  8 Hrs, 26 Mins",
-      "System": "EU2"
+      "System": "EU2",
+      "State": "InProgress"
     },
     {
       "RequestID": 1008230,
@@ -173,7 +183,8 @@ export const jsonData = [
       "FinishedBy": "GRaja2",
       "DurationMinutes": 18866,
       "Duration": "34 Days,  8 Hrs, 26 Mins",
-      "System": "EU2"
+      "System": "EU2",
+      "State": "InProgress"
     },
     {
       "RequestID": 1008230,
@@ -189,7 +200,8 @@ export const jsonData = [
       "FinishedBy": "ELUCANTO",
       "DurationMinutes": 189,
       "Duration": "0 Days,  3 Hrs,  9 Mins",
-      "System": "EU2"
+      "System": "EU2",
+      "State": "Upcoming"
     },
     {
       "RequestID": 1008230,
@@ -205,7 +217,8 @@ export const jsonData = [
       "FinishedBy": "ELUCANTO",
       "DurationMinutes": 189,
       "Duration": "0 Days,  3 Hrs,  9 Mins",
-      "System": "EU2"
+      "System": "EU2",
+      "State": "Upcoming"
     },
     {
       "RequestID": 1008230,
@@ -221,7 +234,8 @@ export const jsonData = [
       "FinishedBy": "ELUCANTO",
       "DurationMinutes": 189,
       "Duration": "0 Days,  3 Hrs,  9 Mins",
-      "System": "EU2"
+      "System": "EU2",
+      "State": "Upcoming"
     },
     {
       "RequestID": 1008230,
@@ -237,7 +251,8 @@ export const jsonData = [
       "FinishedBy": "ELUCANTO",
       "DurationMinutes": 189,
       "Duration": "0 Days,  3 Hrs,  9 Mins",
-      "System": "EU2"
+      "System": "EU2",
+      "State": "Upcoming"
     },
     {
       "RequestID": 1008230,
@@ -253,7 +268,8 @@ export const jsonData = [
       "FinishedBy": "process",
       "DurationMinutes": 1,
       "Duration": "0 Days,  0 Hrs,  1 Min",
-      "System": "EU2"
+      "System": "EU2",
+      "State": "Upcoming"
     },
     {
       "RequestID": 1010624,
@@ -269,6 +285,7 @@ export const jsonData = [
       "FinishedBy": "ADVOCHT",
       "DurationMinutes": 590,
       "Duration": "1 Day,   0 Hrs, 50 Mins",
-      "System": "EU2"
+      "System": "EU2",
+      "State": "Upcoming"
     }
   ];
