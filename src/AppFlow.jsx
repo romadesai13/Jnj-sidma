@@ -9,7 +9,7 @@ import ReactFlow, {
   useEdgesState,
 } from "reactflow";
 import dagre from "dagre";
-import { ProgressIndicator } from '@fluentui/react/lib/ProgressIndicator';
+import ProgressBar from "./controls/ProgressBar";
 import "reactflow/dist/style.css";
 
 import { jsonData } from "./payload/sample-data";
@@ -29,13 +29,13 @@ function generatePrevNodeId(dataNode) {
 function getBgColor(state) {
   switch (state) {
     case 'Completed':
-      return 'green';
+      return '#50C878';
       break;
     case 'InProgress':
       return 'yellow';
       break;
     default:
-      return 'red';
+      return '#E74C3C';
   }
 }
 
@@ -70,6 +70,7 @@ function constructInitialNodes() {
             width: 700,
             height: 900,
           },
+          nodeType: 'Parent'
         };
         nodes.push(newGroup);
       }
@@ -79,10 +80,8 @@ function constructInitialNodes() {
         data: { label: n.Role },
         draggable: false,
         style: { backgroundColor: getBgColor(n.State) },
-        className: 'nodrag'
-        //parentNode: n.Scenario,
-        // expandParent : true,
-        //extent: 'parent' 
+        className: 'nodrag',
+        nodeType: 'Child'
       };
 
       if (prevNodeId == "--") {
@@ -120,6 +119,8 @@ const nodeWidth = 172;
 const nodeHeight = 36;
 
 const getLayoutedElements = (nodes, edges, direction = "LR") => {
+  let minX = Number.MAX_VALUE, minY = Number.MAX_VALUE;
+  let maxX = 0, maxY = 0;
   const isHorizontal = direction === "LR";
   dagreGraph.setGraph({ rankdir: direction });
 
@@ -176,18 +177,68 @@ const getLayoutedElements = (nodes, edges, direction = "LR") => {
 
       node.position = {
         x: startX - 50,//50 buffer,
-        y: 0, //startY,
+        y: -50, //startY,
       };
 
       node.style = {
         width: endX + 172 - startX + 50,//50 buffer
-        height: endY + 36 - startY > 500 ? endY + 36 - startY : 500, //500 for min height
+        height: endY + 36 - startY > 600 ? endY + 36 - startY : 600, //700 for min height
         backgroundColor: 'rgba(255, 255, 255, 0)',
       }
+
+      minX = node.position.x < minX ? node.position.x : minX; //start of first parent node
+      minY = node.position.y < minY ? node.position.y : minY; //start of first parent node
+      maxX = node.position.x + node.style.width > maxX ? node.position.x + node.style.width : maxX; //start of last node + width, to get fill width progress bar
+      maxY = node.position.y + node.style.height > maxY ? node.position.y + node.style.height : maxY;//not needed, because fixed height
     }
 
     return node;
   });
+
+  let completed = jsonData.filter(x => x.State == 'Completed');
+  let child = nodes.filter(x=> x.nodeType == "Child");
+  const total = [...new Set(child.map(item => item.id))];
+  let percentComplete = Math.round(completed.length / total.length * 100);
+  console.log(percentComplete);
+  
+  let frameWidth = maxX-minX;
+  const progressBarGreenNode = {
+    id: 'progressBarGreen',
+    data: { label: percentComplete + '%' },
+    draggable: false,
+    className: 'pb',
+    type: 'default',
+    style: {
+      width: (frameWidth * percentComplete)/100,
+      height: 50,
+      backgroundColor: '#50C878',
+    },
+    position: {
+      x: minX,
+      y: minY + 50
+    },
+    nodeType: 'progressBarGreen'
+  };
+  nodes.push(progressBarGreenNode);
+
+  const progressBarRedNode = {
+    id: 'progressBarRed',
+    data: { label: 100 - percentComplete + '%' },
+    draggable: false,
+    className: 'pb',
+    type: 'default',
+    style: {
+      width: maxX - (minX + (frameWidth * percentComplete)/100),
+      height: 50,
+      backgroundColor: '#E74C3C',
+    },
+    position: {
+      x: minX + (frameWidth * percentComplete)/100,
+      y: minY + 50
+    },
+    nodeType: 'progressBarRed'
+  };
+  nodes.push(progressBarRedNode)
 
   return { nodes, edges };
 };
@@ -196,10 +247,12 @@ const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
   initialNodes,
   initialEdges
 );
-
+// const intervalDelay = 100;
+// const intervalIncrement = 0.01;
 const AppFlow = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
+  const [percentComplete, setPercentComplete] = React.useState(0);
 
   const onConnect = useCallback(
     (params) =>
@@ -211,23 +264,30 @@ const AppFlow = () => {
       ),
     []
   );
-  const onLayout = useCallback(
-    (direction) => {
-      const { nodes: layoutedNodes, edges: layoutedEdges } =
-        getLayoutedElements(nodes, edges, direction);
+  // const onLayout = useCallback(
+  //   (direction) => {
+  //     const { nodes: layoutedNodes, edges: layoutedEdges } =
+  //       getLayoutedElements(nodes, edges, direction);
 
-      setNodes([...layoutedNodes]);
-      setEdges([...layoutedEdges]);
-    },
-    [nodes, edges]
-  );
+  //     setNodes([...layoutedNodes]);
+  //     setEdges([...layoutedEdges]);
+  //   },
+  //   [nodes, edges]
+  // );
+
+  React.useEffect(() => {
+    let completed = jsonData.filter(x => x.State == 'Completed');
+    let child = nodes.filter(x=> x.nodeType == "Child");
+    const total = [...new Set(child.map(item => item.id))];
+    setPercentComplete(Math.round(completed.length / total.length * 100));
+  });
 
   return (
-    <div class="container">
-      <div class="progressbar">
+    <div className="container">
+      {/* <div class="progressbar">
       <ProgressIndicator label="Progress Example" description="" percentComplete={0.5} barHeight={8} />
-      </div>
-      <div class="reactflow">
+      </div> */}
+      <div className="reactflow">
         <ReactFlow
           nodes={nodes}
           edges={edges}
@@ -238,6 +298,9 @@ const AppFlow = () => {
           fitView
         >
           <Background variant="dots" gap={12} size={1} />
+          {/*<Panel position="top-center" className="panel">
+               <ProgressBar bgcolor="green" progress={percentComplete} height={30} />
+          </Panel>  */}
           <Controls />
           {/* <Panel position="top-right">
           <button onClick={() => onLayout('TB')}>vertical layout</button>
