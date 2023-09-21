@@ -3,13 +3,11 @@ import ReactFlow, {
   addEdge,
   ConnectionLineType,
   Controls,
-  Panel,
   Background,
   useNodesState,
   useEdgesState,
 } from "reactflow";
 import dagre from "dagre";
-import ProgressBar from "./controls/ProgressBar";
 import "reactflow/dist/style.css";
 
 import { jsonData } from "./payload/sample-data";
@@ -247,12 +245,10 @@ const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
   initialNodes,
   initialEdges
 );
-// const intervalDelay = 100;
-// const intervalIncrement = 0.01;
+
 const AppFlow = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
-  const [percentComplete, setPercentComplete] = React.useState(0);
 
   const onConnect = useCallback(
     (params) =>
@@ -264,31 +260,9 @@ const AppFlow = () => {
       ),
     []
   );
-  // const onLayout = useCallback(
-  //   (direction) => {
-  //     const { nodes: layoutedNodes, edges: layoutedEdges } =
-  //       getLayoutedElements(nodes, edges, direction);
-
-  //     setNodes([...layoutedNodes]);
-  //     setEdges([...layoutedEdges]);
-  //   },
-  //   [nodes, edges]
-  // );
-
-  React.useEffect(() => {
-    let completed = jsonData.filter(x => x.State == 'Completed');
-    let child = nodes.filter(x=> x.nodeType == "Child");
-    const total = [...new Set(child.map(item => item.id))];
-    setPercentComplete(Math.round(completed.length / total.length * 100));
-  });
 
   return (
-    <div className="container">
-      {/* <div class="progressbar">
-      <ProgressIndicator label="Progress Example" description="" percentComplete={0.5} barHeight={8} />
-      </div> */}
-      <div className="reactflow">
-        <ReactFlow
+    <ReactFlow
           nodes={nodes}
           edges={edges}
           onNodesChange={onNodesChange}
@@ -298,17 +272,8 @@ const AppFlow = () => {
           fitView
         >
           <Background variant="dots" gap={12} size={1} />
-          {/*<Panel position="top-center" className="panel">
-               <ProgressBar bgcolor="green" progress={percentComplete} height={30} />
-          </Panel>  */}
           <Controls />
-          {/* <Panel position="top-right">
-          <button onClick={() => onLayout('TB')}>vertical layout</button>
-          <button onClick={() => onLayout('LR')}>horizontal layout</button>
-        </Panel> */}
         </ReactFlow>
-      </div>
-    </div>
   );
 };
 
