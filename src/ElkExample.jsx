@@ -4,6 +4,8 @@ import React, { useCallback, useLayoutEffect } from 'react';
 import ReactFlow, {
   ReactFlowProvider,
   addEdge,
+  Controls,
+  Background,
   Panel,
   useNodesState,
   useEdgesState,
@@ -12,7 +14,9 @@ import ReactFlow, {
 
 import 'reactflow/dist/style.css';
 
-const elk = new ELK();
+const elk = new ELK({
+  workerUrl: './elk-worker.min.js'
+});
 
 // Elk has a *huge* amount of options to configure. To see everything you can
 // tweak check out:
@@ -21,9 +25,16 @@ const elk = new ELK();
 // - https://www.eclipse.org/elk/reference/options.html
 const elkOptions = {
   'elk.algorithm': 'layered',
-  'elk.layered.spacing.nodeNodeBetweenLayers': '100',
+  'elk.layered.spacing.nodeNodeBetweenLayers': '100.0',
   'elk.spacing.nodeNode': '80',
-  'elk.layered.wrapping.strategy': 'MULTI_EDGE'
+  'elk.layered.wrapping.strategy': 'MULTI_EDGE',
+  'elk.hierarchyHandling': 'INCLUDE_CHILDREN',
+  'elk.partitioning.activate': 'true',
+  'elk.direction': 'RIGHT', // Top-to-bottom direction
+  'elk.direction': 'RIGHT',
+  'elk.spacing.nodeNode': 30, // Vertical spacing between nodes
+  'elk.spacing.edgeNode': 10, // Spacing between edges and nodes
+  'elk.edgeRouting': 'POLYLINE', // Specify how edges should be routed
 };
 
 const getLayoutedElements = (nodes, edges, options = {}) => {
@@ -84,7 +95,7 @@ function LayoutFlow() {
 
   // Calculate the initial layout on mount.
   useLayoutEffect(() => {
-    onLayout({ direction: 'DOWN', useInitialNodes: true });
+    onLayout({ direction: 'RIGHT', useInitialNodes: true });
   }, []);
 
   return (
@@ -96,6 +107,8 @@ function LayoutFlow() {
       onEdgesChange={onEdgesChange}
       fitView
     >
+    <Background variant="dots" gap={12} size={1} />
+    <Controls />
     </ReactFlow>
   );
 }
