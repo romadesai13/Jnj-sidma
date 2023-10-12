@@ -25,10 +25,17 @@ const elk = new ELK({
 // - https://www.eclipse.org/elk/reference/options.html
 const elkOptions = {
   'elk.algorithm': 'layered',
-  'elk.layered.spacing.nodeNodeBetweenLayers': '100.0',
-  'elk.spacing.nodeNode': '80',
-  'elk.layered.wrapping.strategy': 'MULTI_EDGE',
-  //'elk.core.options.HierarchyHandling': SEPARATE_CHILDREN
+  // 'elk.layered.spacing.nodeNodeBetweenLayers': '100.0',
+  // 'elk.spacing.nodeNode': '80',
+  // 'elk.layered.wrapping.strategy': 'MULTI_EDGE',
+  // //'elk.core.options.HierarchyHandling': SEPARATE_CHILDREN,
+  'elk.partitioning.activate': 'true',
+  // 'elk.layered.nodePlacement.strategy': 'BRANDES_KOEPF',
+  // 'elk.layered.layering.strategy': 'BF_MODEL_ORDER', 
+  // 'elk.edgeRouting': 'POLYLINE',
+  // //'considerModelOrder.strategy': 'NODES_AND_EDGES',
+  // 'elk.alignment': 'RIGHT',
+  // 'elk.direction': 'RIGHT',
 };
 
 const getLayoutedElements = (nodes, edges, options = {}) => {

@@ -48,19 +48,6 @@ function generateGroupId(dataNode) {
      const scenarioGroups = Object.groupBy(jsonData, ({ Scenario }) => Scenario);
     
      Object.keys(scenarioGroups).forEach((key, index) => {
-        const newGroup = {
-            id: key,
-            data: { label: key },
-            children: [],
-            style: {
-                width: 500,
-                height: 700,
-            },
-            position:{}
-            // layoutOptions: {
-            //   'partitioning.partition': index,
-            // },
-          };
 
           scenarioGroups[key].forEach(element => {
             const nodeId = generateNodeId(element);
@@ -69,15 +56,18 @@ function generateGroupId(dataNode) {
                 id: nodeId,
                 data: { label: element.Role },
                 position:{},
+                layoutOptions: {
+                  'partitioning.partition': index,
+                },
                 // style: {
                 //   width: nodeWidth,
                 //   height: nodeHeight,
                 // },
-                parentNode: key,
-                backgroundColor: '#E74C3C',
+                //parentNode: key,
+                //backgroundColor: '#E74C3C',
               };
-            if (newGroup.children.findIndex(x => x.id === nodeId) === -1) {
-              newGroup.children.push(newNode);
+            if (nodes.findIndex(x => x.id === nodeId) === -1) {
+              nodes.push(newNode);
             }
               //nodes.push(newNode);
 
@@ -86,26 +76,28 @@ function generateGroupId(dataNode) {
                 const edgeLabel = `to the ${element.Role}`;
                 const edge = {
                   id: edgeId,
-                  sources: [prevNodeId],
-                  targets: [nodeId],
+                  source: prevNodeId,
+                  target: nodeId,
                   label: edgeLabel,
                   type: "smoothstep",
                 };
         
-                edges.push(edge);
+                if (edges.findIndex(x => x.id === edgeId) === -1) {
+                  edges.push(edge);
+                }
               }
           });
           
-         nodes.push(newGroup);
-         if (index + 1 !== Object.keys(scenarioGroups).length) {
-             edges.push({
-                 id: `${Object.keys(scenarioGroups)[index]}-${Object.keys(scenarioGroups)[index + 1]}`,
-                 sources: [Object.keys(scenarioGroups)[index]],
-                 targets: [Object.keys(scenarioGroups)[index + 1]],
-                 label: ``,
-                 type: "smoothstep",
-             })
-         }
+        //  nodes.push(newGroup);
+        //  if (index + 1 !== Object.keys(scenarioGroups).length) {
+        //      edges.push({
+        //          id: `${Object.keys(scenarioGroups)[index]}-${Object.keys(scenarioGroups)[index + 1]}`,
+        //          sources: [Object.keys(scenarioGroups)[index]],
+        //          targets: [Object.keys(scenarioGroups)[index + 1]],
+        //          label: ``,
+        //          type: "smoothstep",
+        //      })
+        //  }
       });
     }
     return {
