@@ -52,12 +52,11 @@ function generateGroupId(dataNode) {
             id: key,
             data: { label: key },
             children: [],
-            nodeType: 'Parent',
             style: {
                 width: 500,
                 height: 700,
-              },
-              level: "cluster",
+            },
+            position:{}
             // layoutOptions: {
             //   'partitioning.partition': index,
             // },
@@ -68,19 +67,18 @@ function generateGroupId(dataNode) {
             const prevNodeId = generatePrevNodeId(element);
             const newNode = {
                 id: nodeId,
-                level: "leaf",
-                labels: [{"text":element.Role}],
                 data: { label: element.Role },
-                nodeType: 'Child',
-                width: nodeWidth,
-                height: nodeHeight,
+                position:{},
+                // style: {
+                //   width: nodeWidth,
+                //   height: nodeHeight,
+                // },
                 parentNode: key,
-                style:{},
-                extent: 'parent',
                 backgroundColor: '#E74C3C',
-                
               };
+            if (newGroup.children.findIndex(x => x.id === nodeId) === -1) {
               newGroup.children.push(newNode);
+            }
               //nodes.push(newNode);
 
               if (prevNodeId != "--") {
@@ -98,7 +96,7 @@ function generateGroupId(dataNode) {
               }
           });
           
-          nodes.push(newGroup);
+         nodes.push(newGroup);
          if (index + 1 !== Object.keys(scenarioGroups).length) {
              edges.push({
                  id: `${Object.keys(scenarioGroups)[index]}-${Object.keys(scenarioGroups)[index + 1]}`,
@@ -110,128 +108,11 @@ function generateGroupId(dataNode) {
          }
       });
     }
-    console.log(nodes, edges)
     return {
       initialNodes: nodes,
       initialEdges: edges,
     };
   }
 
-  export const initialNodes = [
-    {
-        id:"analytics1",
-        level: "cluster",
-        name: "analytics1",
-        children: [
-            {
-                id:"animate1",
-                level: "leaf",
-                height: 30,
-                width: 30,
-                parent: 1,
-                labels: [{"text":"a"}]
-            },
-            {
-                id:"animate2",
-                level: "leaf",
-                height: 30,
-                width: 30,
-                parent: 1,
-                labels: [{"text":"b"}]
-            },
-            {
-                id:"animate3",
-                level: "leaf",
-                height: 30,
-                width: 30,
-                parent: 1,
-                labels: [{"text":"c"}]
-            }
-        ]
-    },
-    {
-        id:"analytics2",
-        level: "cluster",
-        name: "analytics2",
-        children: [
-            {
-                id:"animate6",
-                level: "leaf",
-                height: 30,
-                width: 30,
-                parent: 1,
-                labels: [{"text":"f"}]
-            },
-            {
-                id:"animate8",
-                level: "leaf",
-                height: 30,
-                width: 30,
-                parent: 1,
-                "labels": [{"text":"h"}]
-            }
-        ]
-    },
-    {id: "n1", width: 30, height: 30, labels: [{text:"d"}]}
-  ];//constructInitialNodes().initialNodes;
-  export const initialEdges = [
-    {id: "e1", sources: ["animate2"], targets: ["n1"]},
-    {id: "e2", sources: ["animate3"], targets: ["n1"]},
-    {id: "e3", sources: ["animate1"], targets: ["n1"]},
-    {id: "e4", sources: ["n1"], targets: ["animate8"]},
-    {id: "e5", sources: ["n1"], targets: ["animate6"]},
-  ];//constructInitialNodes().initialEdges;
-  const position = { x: 0, y: 0 };
-
-// export const initialNodes = [
-//   {
-//     id: 'X',
-//     type: 'group',
-//     data: { label: null },
-//     position,
-//   },
-//   {
-//     id: '1',
-//     type: 'input',
-//     data: { label: 'input' },
-//     position,
-//     parentNode: 'X',
-//   },
-//   {
-//     id: '2',
-//     data: { label: 'node 2' },
-//     position,
-//     parentNode: 'X',
-//   },
-//   {
-//     id: '2a',
-//     data: { label: 'node 2a' },
-//     position,
-
-//   },
-//   {
-//     id: '2b',
-//     data: { label: 'node 2b' },
-//     position,
-//   },
-//   {
-//     id: '2c',
-//     data: { label: 'node 2c' },
-//     position,
-//   },
-//   {
-//     id: '3',
-//     data: { label: 'node 3' },
-//     position,
-//     parentNode: 'X',
-//   },
-// ];
-
-// export const initialEdges = [
-//   { id: 'e12', source: '1', target: '2', type: 'smoothstep' },
-//   { id: 'e13', source: '1', target: '3', type: 'smoothstep' },
-//   { id: 'e22a', source: '2', target: '2a', type: 'smoothstep' },
-//   { id: 'e22b', source: '2', target: '2b', type: 'smoothstep' },
-//   { id: 'e22c', source: '2', target: '2c', type: 'smoothstep' },
- 
-// ];
+  export const initialNodes = constructInitialNodes().initialNodes;
+  export const initialEdges = constructInitialNodes().initialEdges;

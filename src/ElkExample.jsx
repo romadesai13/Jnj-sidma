@@ -28,13 +28,7 @@ const elkOptions = {
   'elk.layered.spacing.nodeNodeBetweenLayers': '100.0',
   'elk.spacing.nodeNode': '80',
   'elk.layered.wrapping.strategy': 'MULTI_EDGE',
-  'elk.hierarchyHandling': 'INCLUDE_CHILDREN',
-  'elk.partitioning.activate': 'true',
-  'elk.direction': 'RIGHT', // Top-to-bottom direction
-  'elk.direction': 'RIGHT',
-  'elk.spacing.nodeNode': 30, // Vertical spacing between nodes
-  'elk.spacing.edgeNode': 10, // Spacing between edges and nodes
-  'elk.edgeRouting': 'POLYLINE', // Specify how edges should be routed
+  //'elk.core.options.HierarchyHandling': SEPARATE_CHILDREN
 };
 
 const getLayoutedElements = (nodes, edges, options = {}) => {
@@ -56,18 +50,18 @@ const getLayoutedElements = (nodes, edges, options = {}) => {
     edges: edges,
   };
 
-  return elk
-    .layout(graph)
-    .then((layoutedGraph) => ({
-      nodes: layoutedGraph.children.map((node) => ({
-        ...node,
-        // React Flow expects a position property on the node instead of `x`
-        // and `y` fields.
-        position: { x: node.x, y: node.y },
-      })),
+return elk
+.layout(graph)
+.then((layoutedGraph) => ({
+  nodes: layoutedGraph.children.map((node) => ({
+    ...node,
+    // React Flow expects a position property on the node instead of `x`
+    // and `y` fields.
+    position: { x: node.x, y: node.y },
+  })),
 
-      edges: layoutedGraph.edges,
-    }))
+  edges: layoutedGraph.edges,
+}))
     .catch(console.error);
 };
 
@@ -97,7 +91,7 @@ function LayoutFlow() {
   useLayoutEffect(() => {
     onLayout({ direction: 'RIGHT', useInitialNodes: true });
   }, []);
-
+console.log(nodes, edges);
   return (
     <ReactFlow
       nodes={nodes}
