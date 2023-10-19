@@ -7,7 +7,7 @@ import LayoutFlow from './ElkExample';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    {/* <AppFlow /> */}
-    <LayoutFlow />
+     <AppFlow />
+     {/* <LayoutFlow /> */}
   </React.StrictMode>,
 )

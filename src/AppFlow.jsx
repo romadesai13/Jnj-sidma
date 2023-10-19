@@ -21,19 +21,19 @@ function generateNodeId1(dataNode) {
 }
 
 function generatePrevNodeId(dataNode) {
-  return `${dataNode.BusinessProcess_Prev}+${dataNode.Scenario_Prev}+${dataNode.Role_Prev}`;
+  return `${dataNode.BusinessProcess_Prev}+${dataNode.Scenario_Prev}+${dataNode.Reole_Prev}`;
 }
 
 function getBgColor(state) {
   switch (state) {
     case 'Completed':
       return '#50C878';
-      break;
     case 'InProgress':
       return 'yellow';
-      break;
-    default:
+    case 'Upcoming':
       return '#E74C3C';
+    default: 
+      return 'black';
   }
 }
 
@@ -180,7 +180,7 @@ const getLayoutedElements = (nodes, edges, direction = "LR") => {
 
       node.style = {
         width: endX + 172 - startX + 50,//50 buffer
-        height: endY + 36 - startY > 600 ? endY + 36 - startY : 600, //700 for min height
+        height: endY + 36 - startY > 900 ? endY + 36 - startY : 900, //900 for min height
         backgroundColor: 'rgba(255, 255, 255, 0)',
       }
 
