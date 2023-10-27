@@ -13,9 +13,11 @@
     "@dagrejs/dagre": "^1.0.2",
     "@fluentui/react": "^8.111.2",
     "dagre": "^0.8.5",
+    "elkjs": "^0.8.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "reactflow": "^11.8.3"
+    "reactflow": "^11.8.3",
+    "web-worker": "^1.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",
