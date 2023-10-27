@@ -24,11 +24,12 @@ const elk = new ELK({
 // - https://www.eclipse.org/elk/reference/algorithms.html
 // - https://www.eclipse.org/elk/reference/options.html
 const elkOptions = {
+  'considerModelOrder.strategy': 'NODES_AND_EDGES',
   'elk.algorithm': 'layered',
+  'elk.partitioning.activate': 'true',
   'elk.layered.spacing.nodeNodeBetweenLayers': '100.0',
   'elk.spacing.nodeNode': '80',
-  //'elk.layered.wrapping.strategy': 'MULTI_EDGE',
-  'elk.partitioning.activate': 'true',
+  'elk.core.options.Alignment': 'BOTTOM'
 };
 
 function getChildNodes(dataNodes, groupId) {
@@ -47,7 +48,7 @@ const updateParentNodes = (nodes, edges) => {
   let minX = Number.MAX_VALUE, minY = Number.MAX_VALUE;
   let maxX = 0, maxY = 0;
   nodes.forEach((node) => {
-    if (node.type === 'output') {
+    if (node.nodeType === 'Parent') {
       let startX = Number.MAX_VALUE;
       let startY = Number.MAX_VALUE;
       let endX = 0;
@@ -76,7 +77,7 @@ const updateParentNodes = (nodes, edges) => {
 
       node.style = {
         width: endX + 150 - startX + 100,//80 buffer = elk.layered.spacing.nodeNodeBetweenLayers
-        height: endY + 50 - startY > 700 ? endY + 50 - startY : 700, //700 for min height
+        height: endY + 100 > 700 ? endY + 100 : 700, //700 for min height
         backgroundColor: 'rgba(255, 255, 255, 0)',
       }
 
@@ -105,7 +106,7 @@ const updateParentNodes = (nodes, edges) => {
       backgroundColor: '#50C878',
     };
     green.x = minX;
-    green.y = minY + 50;
+    green.y = minY - 50;
   };
 
   let red = nodes.find(x => x.nodeType === 'progressBarRed');
@@ -118,7 +119,7 @@ const updateParentNodes = (nodes, edges) => {
       backgroundColor: '#E74C3C',
     };
     red.x = minX + (frameWidth * percentComplete) / 100;
-    red.y = minY + 50
+    red.y = minY - 50
   }
   return { nodes, edges };
 };

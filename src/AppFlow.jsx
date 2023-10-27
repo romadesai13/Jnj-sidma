@@ -213,7 +213,7 @@ const getLayoutedElements = (nodes, edges, direction = "LR") => {
     },
     position: {
       x: minX,
-      y: minY + 50
+      y: minY - 50
     },
     nodeType: 'progressBarGreen'
   };
@@ -232,7 +232,7 @@ const getLayoutedElements = (nodes, edges, direction = "LR") => {
     },
     position: {
       x: minX + (frameWidth * percentComplete)/100,
-      y: minY + 50
+      y: minY - 50
     },
     nodeType: 'progressBarRed'
   };
