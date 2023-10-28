@@ -26,20 +26,20 @@ function generatePrevNodeId(dataNode) {
 
 function getBgColor(state) {
   switch (state) {
-    case "Completed":
-      return "#50C878";
+    case 'Completed':
+      return '#50C878';
       break;
-    case "InProgress":
-      return "yellow";
+    case 'InProgress':
+      return 'yellow';
       break;
     default:
-      return "#E74C3C";
+      return '#E74C3C';
   }
 }
 
 function getChildNodes(dataNodes, groupId) {
   let children = [];
-  dataNodes.forEach((node) => {
+  dataNodes.forEach(node => {
     const idParts = node.id.split("+");
     if (idParts && idParts.length > 2 && idParts[1] == groupId) {
       children.push(node);
@@ -57,18 +57,18 @@ function constructInitialNodes() {
       const groupId = generateGroupId(n);
       const nodeId = generateNodeId1(n);
       const prevNodeId = generatePrevNodeId(n);
-      if (nodes.findIndex((x) => x.id == groupId) == -1) {
+      if (nodes.findIndex(x => x.id == groupId) == -1) {
         const newGroup = {
           id: groupId,
           data: { label: n.Scenario },
           draggable: false,
-          className: "light nodrag",
+          className: 'light nodrag',
           type: "output",
           style: {
             width: 700,
             height: 900,
           },
-          nodeType: "Parent",
+          nodeType: 'Parent'
         };
         nodes.push(newGroup);
       }
@@ -78,8 +78,8 @@ function constructInitialNodes() {
         data: { label: n.Role },
         draggable: false,
         style: { backgroundColor: getBgColor(n.State) },
-        className: "nodrag",
-        nodeType: "Child",
+        className: 'nodrag',
+        nodeType: 'Child'
       };
 
       if (prevNodeId == "--") {
@@ -117,10 +117,8 @@ const nodeWidth = 172;
 const nodeHeight = 36;
 
 const getLayoutedElements = (nodes, edges, direction = "LR") => {
-  let minX = Number.MAX_VALUE,
-    minY = Number.MAX_VALUE;
-  let maxX = 0,
-    maxY = 0;
+  let minX = Number.MAX_VALUE, minY = Number.MAX_VALUE;
+  let maxX = 0, maxY = 0;
   const isHorizontal = direction === "LR";
   dagreGraph.setGraph({ rankdir: direction });
 
@@ -150,14 +148,14 @@ const getLayoutedElements = (nodes, edges, direction = "LR") => {
   });
 
   nodes.forEach((node) => {
-    if (node.type === "output") {
+    if (node.type === 'output') {
       let startX = Number.MAX_VALUE;
       let startY = Number.MAX_VALUE;
       let endX = 0;
       let endY = 0;
       let children = getChildNodes(nodes, node.id);
-      children.forEach((element) => {
-        const nodeWithPosition = dagreGraph.node(element.id);
+      children.forEach(element => {
+        const nodeWithPosition = dagreGraph.node(element.id)
         if (startX > nodeWithPosition.x) {
           startX = nodeWithPosition.x;
         }
@@ -176,75 +174,69 @@ const getLayoutedElements = (nodes, edges, direction = "LR") => {
       });
 
       node.position = {
-        x: startX - 50, //50 buffer,
+        x: startX - 50,//50 buffer,
         y: -50, //startY,
       };
 
       node.style = {
-        width: endX + 172 - startX + 50, //50 buffer
+        width: endX + 172 - startX + 50,//50 buffer
         height: endY + 36 - startY > 600 ? endY + 36 - startY : 600, //700 for min height
-        backgroundColor: "rgba(255, 255, 255, 0)",
-      };
+        backgroundColor: 'rgba(255, 255, 255, 0)',
+      }
 
       minX = node.position.x < minX ? node.position.x : minX; //start of first parent node
       minY = node.position.y < minY ? node.position.y : minY; //start of first parent node
-      maxX =
-        node.position.x + node.style.width > maxX
-          ? node.position.x + node.style.width
-          : maxX; //start of last node + width, to get fill width progress bar
-      maxY =
-        node.position.y + node.style.height > maxY
-          ? node.position.y + node.style.height
-          : maxY; //not needed, because fixed height
+      maxX = node.position.x + node.style.width > maxX ? node.position.x + node.style.width : maxX; //start of last node + width, to get fill width progress bar
+      maxY = node.position.y + node.style.height > maxY ? node.position.y + node.style.height : maxY;//not needed, because fixed height
     }
 
     return node;
   });
 
-  let completed = jsonData.filter((x) => x.State == "Completed");
-  let child = nodes.filter((x) => x.nodeType == "Child");
-  const total = [...new Set(child.map((item) => item.id))];
-  let percentComplete = Math.round((completed.length / total.length) * 100);
+  let completed = jsonData.filter(x => x.State == 'Completed');
+  let child = nodes.filter(x=> x.nodeType == "Child");
+  const total = [...new Set(child.map(item => item.id))];
+  let percentComplete = Math.round(completed.length / total.length * 100);
   console.log(percentComplete);
-
-  let frameWidth = maxX - minX;
+  
+  let frameWidth = maxX-minX;
   const progressBarGreenNode = {
-    id: "progressBarGreen",
-    data: { label: percentComplete + "%" },
+    id: 'progressBarGreen',
+    data: { label: percentComplete + '%' },
     draggable: false,
-    className: "pb",
-    type: "default",
+    className: 'pb',
+    type: 'default',
     style: {
-      width: (frameWidth * percentComplete) / 100,
+      width: (frameWidth * percentComplete)/100,
       height: 50,
-      backgroundColor: "#50C878",
+      backgroundColor: '#50C878',
     },
     position: {
       x: minX,
-      y: minY + 50,
+      y: minY + 50
     },
-    nodeType: "progressBarGreen",
+    nodeType: 'progressBarGreen'
   };
   nodes.push(progressBarGreenNode);
 
   const progressBarRedNode = {
-    id: "progressBarRed",
-    data: { label: 100 - percentComplete + "%" },
+    id: 'progressBarRed',
+    data: { label: 100 - percentComplete + '%' },
     draggable: false,
-    className: "pb",
-    type: "default",
+    className: 'pb',
+    type: 'default',
     style: {
-      width: maxX - (minX + (frameWidth * percentComplete) / 100),
+      width: maxX - (minX + (frameWidth * percentComplete)/100),
       height: 50,
-      backgroundColor: "#E74C3C",
+      backgroundColor: '#E74C3C',
     },
     position: {
-      x: minX + (frameWidth * percentComplete) / 100,
-      y: minY + 50,
+      x: minX + (frameWidth * percentComplete)/100,
+      y: minY + 50
     },
-    nodeType: "progressBarRed",
+    nodeType: 'progressBarRed'
   };
-  nodes.push(progressBarRedNode);
+  nodes.push(progressBarRedNode)
 
   return { nodes, edges };
 };
@@ -259,23 +251,29 @@ const AppFlow = () => {
   const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
 
   const onConnect = useCallback(
-    (params) => setEdges((eds) => addEdge({ ...params }, eds)),
+    (params) =>
+      setEdges((eds) =>
+        addEdge(
+          { ...params },
+          eds
+        )
+      ),
     []
   );
 
   return (
     <ReactFlow
-      nodes={nodes}
-      edges={edges}
-      onNodesChange={onNodesChange}
-      onEdgesChange={onEdgesChange}
-      onConnect={onConnect}
-      connectionLineType={ConnectionLineType.SmoothStep}
-      fitView
-    >
-      <Background variant="dots" gap={12} size={1} />
-      <Controls />
-    </ReactFlow>
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onConnect={onConnect}
+          connectionLineType={ConnectionLineType.SmoothStep}
+          fitView
+        >
+          <Background variant="dots" gap={12} size={1} />
+          <Controls />
+        </ReactFlow>
   );
 };
 
