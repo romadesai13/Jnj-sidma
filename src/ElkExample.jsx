@@ -23,13 +23,17 @@ const elk = new ELK({
 //
 // - https://www.eclipse.org/elk/reference/algorithms.html
 // - https://www.eclipse.org/elk/reference/options.html
+//The node order given by the model does not change to produce a better layout. E.g. if node A is before node B in the model this is not changed during crossing minimization. This assumes that the node model order is already respected before crossing minimization. This can be achieved by setting considerModelOrder.strategy to NODES_AND_EDGES.
+// 'elk.direction': 'RIGHT',
+//   'elk.layered.nodePlacement.bk.fixedAlignment': 'RIGHTDOWN', 
+//   'elk.spacing.edgeNode': '180',
 const elkOptions = {
   'considerModelOrder.strategy': 'NODES_AND_EDGES',
   'elk.algorithm': 'layered',
   'elk.partitioning.activate': 'true',
   'elk.layered.spacing.nodeNodeBetweenLayers': '100.0',
   'elk.spacing.nodeNode': '80',
-  'elk.core.options.Alignment': 'BOTTOM'
+  'elk.core.options.Alignment': 'BOTTOM' 
 };
 
 function getChildNodes(dataNodes, groupId) {
@@ -111,7 +115,6 @@ const updateParentNodes = (nodes, edges) => {
 
   let red = nodes.find(x => x.nodeType === 'progressBarRed');
   if (red) {
-    console.log('red');
     red.data = { label: 100 - percentComplete + '%' };
     red.style = {
       width: maxX - (minX + (frameWidth * percentComplete) / 100),

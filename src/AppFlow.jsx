@@ -37,6 +37,19 @@ function getBgColor(state) {
   }
 }
 
+function getEdgeColor(key) {
+  // Generate a hash code from the key
+  let hash = 0;
+  for (let i = 0; i < key.length; i++) {
+    hash = key.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  // Convert the hash code to a hexadecimal color code
+  const color = '#' + ((hash & 0x00FFFFFF) | 0x990000).toString(16).slice(-6);
+
+  return color;
+}
+
 function getChildNodes(dataNodes, groupId) {
   let children = [];
   dataNodes.forEach(node => {
@@ -89,13 +102,17 @@ function constructInitialNodes() {
 
       if (prevNodeId != "--") {
         const edgeId = `${nodeId}-${prevNodeId}`;
-        const edgeLabel = `to the ${n.Role}`;
+        const edgeLabel = `${n.Reole_Prev} to ${n.Role}`;
         const edge = {
           id: edgeId,
           source: prevNodeId,
           target: nodeId,
           label: edgeLabel,
           type: "step",
+          focusable: true,
+          //selectable: true,
+          //zIndex: 1,
+          style: { stroke: getEdgeColor(prevNodeId), strokeWidth: 1 },
         };
 
         edges.push(edge);
