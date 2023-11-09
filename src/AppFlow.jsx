@@ -31,9 +31,9 @@ function getBgColor(state) {
     case 'InProgress':
       return 'yellow';
     case 'Upcoming':
-      return '#E74C3C';
+      return '#aeb0af';
     default: 
-      return 'black';
+      return 'white';
   }
 }
 
@@ -75,7 +75,6 @@ function constructInitialNodes() {
           id: groupId,
           data: { label: n.Scenario },
           draggable: false,
-          className: 'light nodrag',
           type: "output",
           style: {
             width: 700,
@@ -90,7 +89,7 @@ function constructInitialNodes() {
         id: nodeId,
         data: { label: n.Role },
         draggable: false,
-        style: { backgroundColor: getBgColor(n.State) },
+        style: { backgroundColor: getBgColor(n.State), fontSize: 20 },
         className: 'nodrag',
         nodeType: 'Child'
       };
@@ -107,12 +106,8 @@ function constructInitialNodes() {
           id: edgeId,
           source: prevNodeId,
           target: nodeId,
-          label: edgeLabel,
           type: "step",
           focusable: true,
-          //selectable: true,
-          //zIndex: 1,
-          style: { stroke: getEdgeColor(prevNodeId), strokeWidth: 1 },
         };
 
         edges.push(edge);
@@ -199,6 +194,7 @@ const getLayoutedElements = (nodes, edges, direction = "LR") => {
         width: endX + 172 - startX + 50,//50 buffer
         height: endY + 36 - startY > 900 ? endY + 36 - startY : 900, //900 for min height
         backgroundColor: 'rgba(255, 255, 255, 0)',
+        fontSize: 25
       }
 
       minX = node.position.x < minX ? node.position.x : minX; //start of first parent node
@@ -221,12 +217,12 @@ const getLayoutedElements = (nodes, edges, direction = "LR") => {
     id: 'progressBarGreen',
     data: { label: percentComplete + '%' },
     draggable: false,
-    className: 'pb',
     type: 'default',
     style: {
       width: (frameWidth * percentComplete)/100,
       height: 50,
       backgroundColor: '#50C878',
+      fontSize: 25
     },
     position: {
       x: minX,
@@ -240,12 +236,12 @@ const getLayoutedElements = (nodes, edges, direction = "LR") => {
     id: 'progressBarRed',
     data: { label: 100 - percentComplete + '%' },
     draggable: false,
-    className: 'pb',
     type: 'default',
     style: {
       width: maxX - (minX + (frameWidth * percentComplete)/100),
       height: 50,
-      backgroundColor: '#E74C3C',
+      backgroundColor: '#aeb0af',
+      fontSize: 25
     },
     position: {
       x: minX + (frameWidth * percentComplete)/100,

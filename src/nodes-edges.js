@@ -27,6 +27,12 @@ function getBgColor(state) {
 function constructInitialNodes() {
   const nodes = [];
   const edges = [];
+  let root = null;
+  let x = jsonData.filter(x=> x.Reole_Prev === "");
+  console.log('root nodes', x.length);
+  if(x.length === 1) {
+    root = generateNodeId(x[0]);
+  }
   if (jsonData) {
     const scenarioGroups = Object.groupBy(jsonData, ({ Scenario }) => Scenario);
 
@@ -81,7 +87,6 @@ function constructInitialNodes() {
 
     const progressBarGreenNode = {
       id: 'progressBarGreen',
-      //data: { label: percentComplete + '%' },
       draggable: false,
       className: 'pb',
       type: 'default',
@@ -95,7 +100,6 @@ function constructInitialNodes() {
   
     const progressBarRedNode = {
       id: 'progressBarRed',
-      //data: { label: 100 - percentComplete + '%' },
       draggable: false,
       className: 'pb',
       type: 'default',
@@ -110,8 +114,10 @@ function constructInitialNodes() {
   return {
     initialNodes: nodes,
     initialEdges: edges,
+    rootNode: root
   };
 }
 
 export const initialNodes = constructInitialNodes().initialNodes;
 export const initialEdges = constructInitialNodes().initialEdges;
+export const rootNode = constructInitialNodes().rootNode;

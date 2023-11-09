@@ -1,4 +1,4 @@
-import { initialNodes, initialEdges } from './nodes-edges.js';
+import { initialNodes, initialEdges, rootNode } from './nodes-edges.js';
 import ELK from 'elkjs/lib/elk.bundled.js';
 import React, { useCallback, useLayoutEffect } from 'react';
 import ReactFlow, {
@@ -17,7 +17,7 @@ import 'reactflow/dist/style.css';
 const elk = new ELK({
   workerUrl: './elk-worker.min.js'
 });
-
+console.log(rootNode);
 // Elk has a *huge* amount of options to configure. To see everything you can
 // tweak check out:
 //
@@ -30,10 +30,14 @@ const elk = new ELK({
 const elkOptions = {
   'considerModelOrder.strategy': 'NODES_AND_EDGES',
   'elk.algorithm': 'layered',
+  'elk.layered.layering.strategy':'INTERACTIVE',
   'elk.partitioning.activate': 'true',
   'elk.layered.spacing.nodeNodeBetweenLayers': '100.0',
   'elk.spacing.nodeNode': '80',
-  'elk.core.options.Alignment': 'BOTTOM' 
+  'elk.layered.nodePlacement.strategy': 'INTERACTIVE', //this is the key
+  'elk.spacing.edgeNode': '80',
+  //'elk.layered.root': rootNode,
+  //'elk.processingOrder.preferredRoot': rootNode,
 };
 
 function getChildNodes(dataNodes, groupId) {
@@ -152,6 +156,7 @@ const getLayoutedElements = (nodes, edges, options = {}) => {
       //make node update
       const nodes = layoutedGraph.children;
       updateParentNodes(nodes, edges)
+      console.log(layoutedGraph);
 
       return ({
         nodes: layoutedGraph.children.map((node) => ({
